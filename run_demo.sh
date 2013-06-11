@@ -1,6 +1,6 @@
 #!/bin/bash -ex
 #
-# Requirements: sudo apt-get install fakeroot sshpass checkinstall
+# Requirements: sudo apt-get install xterm fakeroot sshpass checkinstall
 #
 type -p 
 test -r sshd_config || exit 5
@@ -28,15 +28,16 @@ tests_ok+=(sign-host-key)
 # seed work dir for installwatch
 mkdir -p work/TRANSL/etc/ssh work/TRANSL/ssh-pki-demo
 cp -v shadow passwd work/TRANSL/etc
-cp -v moduli ssh_config sshd_config ssh_import_id work/TRANSL/etc/ssh
+cp -v ssh_config sshd_config work/TRANSL/etc/ssh
 cp -rv keys/* work/TRANSL/etc/ssh/
 
 function cleanup {
 	set +x
 	test "$daemon" && kill $daemon
-	for t in ${tests_ok[@]} ; do
+	for t in "${tests_ok[@]}" ; do
 		echo "Succeeded $t"
 	done
+	[[ ${tests_ok[@]:-1} == *congratulations* ]] || echo "SOME TESTS FAILED!"
 }
 
 # start ssh daemon
@@ -48,11 +49,10 @@ sleep 1
 kill -0 $daemon && tests_ok+=(start-private-sshd-daemon)
 
 # connect to our daemon and ask for date
-test_label=test-trusting-known-hosts-via-cert-and-login-with-password
 if fakeroot installwatch -t -r $(pwd)/work sshpass -pdemo ssh -vvv -p 2222 root@$myhost date  +ssh-pki-demo_%c | grep ssh-pki-demo ; then
-	tests_ok+=($test_label)
+	tests_ok+=(test-trusting-known-hosts-via-cert-and-login-with-password)
 	daemon=
 else
-	echo "failed $test_label"
 	exit 1
 fi
+tests_ok+=("in running all tests, congratulations!")

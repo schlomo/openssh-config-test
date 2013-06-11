@@ -1,0 +1,4 @@
+This is a test suite for SSH PKI support.
+
+clone this, change into the cloned directory and run run_demo.sh to find out
+if your OpenSSH supports CA-based operations.

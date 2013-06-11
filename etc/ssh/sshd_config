@@ -2,7 +2,8 @@
 
 Port 2222
 Protocol 2
-HostKey keys/host_key
+HostKey /etc/ssh/host_key
+HostCertificate /etc/ssh/host_key-cert.pub
 UsePrivilegeSeparation no
 PermitRootLogin yes
 

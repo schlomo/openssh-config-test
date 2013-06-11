@@ -1,7 +1,5 @@
 #!/bin/bash -ex
-#
-# Requirements: sudo apt-get install xterm fakeroot sshpass checkinstall
-#
+
 type -p 
 test -r sshd_config || exit 5
 rm -Rf keys work

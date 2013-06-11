@@ -2,3 +2,7 @@ This is a test suite for SSH PKI support.
 
 clone this, change into the cloned directory and run run_demo.sh to find out
 if your OpenSSH supports CA-based operations.
+
+Requirements on Ubuntu: sudo apt-get install xterm fakeroot sshpass checkinstall
+
+Developed on Ubuntu 13.04

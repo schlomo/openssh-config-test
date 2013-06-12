@@ -1,6 +1,12 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
 test "$USER" = root && exit 5
+for k in sshpass fakeroot installwatch ; do
+	if ! type -p $k >/dev/null ; then
+		echo "Please install $k"
+		exit 5
+	fi
+done
 test -r sshd_config || exit 5
 rm -Rf keys work
 mkdir keys work
@@ -9,6 +15,7 @@ workdir=$(pwd)/work
 myhost=$(hostname -f)
 tests_ok=()
 
+set -x
 # generate CA key
 ssh-keygen -t dsa -N "" -C "SSH PKI CA Demo" -f keys/ca
 tests_ok+=(create-ca-key)

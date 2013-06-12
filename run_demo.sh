@@ -1,13 +1,22 @@
 #!/bin/bash -e
 
-test "$USER" = root && exit 5
+function die {
+	echo 1>&2 "ERROR: $@"
+	exit 1
+}
+
+[[ "$USER" != root ]] || die "Please run as user, not root"
 for k in sshpass fakeroot checkinstall ; do
 	if ! type -p $k >/dev/null ; then
-		echo "Please install $k"
-		exit 5
+		die "Please install $k"
 	fi
 done
-test -r sshd_config || exit 5
+[[ -r sshd_config  && -r ssh_config && -r passwd && -r shadow ]] || die "Some files are missing???????"
+if [[ -r /etc/init.d/nscd ]] ; then
+	if service nscd status ; then
+		die "nscd running - tests will not work. Please turn off nscd for this test"
+	fi
+fi
 rm -Rf keys work
 mkdir keys work
 workdir=$(pwd)/work
@@ -65,7 +74,7 @@ function cleanup {
 	for t in "${tests_ok[@]}" ; do
 		echo "Succeeded $t"
 	done
-	[[ ${tests_ok[@]:-1} == *congratulations* ]] || echo "SOME TESTS FAILED! Check work/ssh.log and work/sshd.log"
+	[[ ${tests_ok[@]:-1} == *congratulations* ]] || die "SOME TESTS FAILED! Check work/ssh.log and work/sshd.log"
 }
 trap cleanup 0
 daemon=
@@ -80,9 +89,8 @@ function start_daemon_run_ssh {
 
 	sleep 0.2
 	if ! kill -0 $daemon 2>/dev/null ; then
-		echo "FAILED TO START SSHD FOR $label"
 		daemon=
-		exit 1
+		die "FAILED TO START SSHD FOR $label"
 	fi
 
 	# connect to our daemon and ask for date
@@ -90,12 +98,11 @@ function start_daemon_run_ssh {
 		tests_ok+=("$label")
 		sleep 0.2
 		if kill -0 $daemon 2>/dev/null ; then
-			echo "SSHD STILL RUNNING after $label"
-			exit 1
+			die "SSHD STILL RUNNING after $label"
 		fi
 		daemon=
 	else
-		exit 1
+		die "Failed $label"
 	fi
 }
 

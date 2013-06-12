@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 test "$USER" = root && exit 5
-for k in sshpass fakeroot installwatch ; do
+for k in sshpass fakeroot checkinstall ; do
 	if ! type -p $k >/dev/null ; then
 		echo "Please install $k"
 		exit 5
@@ -81,6 +81,7 @@ function start_daemon_run_ssh {
 	sleep 0.2
 	if ! kill -0 $daemon 2>/dev/null ; then
 		echo "FAILED TO START SSHD FOR $label"
+		daemon=
 		exit 1
 	fi
 

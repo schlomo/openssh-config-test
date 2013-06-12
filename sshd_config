@@ -6,5 +6,6 @@ HostKey /etc/ssh/host_key
 HostCertificate /etc/ssh/host_key-cert.pub
 UsePrivilegeSeparation no
 PermitRootLogin yes
+TrustedUserCAKeys /etc/ssh/ca.pub
 
 PubkeyAuthentication yes

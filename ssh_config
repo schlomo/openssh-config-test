@@ -1,5 +1,7 @@
 # SSH PKI Demo
 
 Host *
-    GSSAPIAuthentication no
-    Port 2222
+	GSSAPIAuthentication no
+	Port 2222
+	IdentitiesOnly yes
+

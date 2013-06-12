@@ -110,7 +110,7 @@ start_daemon_run_ssh test-login-with-root-key-trusted-by-cert \
 	"&&" grep Accepted.certificate.ID $workdir/sshd.log
 
 start_daemon_run_ssh test-that-username-in-cert-must-match-target-user \
-	ssh -vvv -o PreferredAuthentications=publickey -i /etc/ssh/user_key_unpriv root@$myhost  date  +ssh-pki-demo_%c \| grep ssh-pki-demo \
+	ssh -vvv -o PreferredAuthentications=publickey -i /etc/ssh/user_key_unpriv root@$myhost  date  +ssh-pki-demo_%c \
 	";" grep Permission.denied $workdir/ssh.log
 
 

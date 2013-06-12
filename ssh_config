@@ -2,3 +2,4 @@
 
 Host *
     GSSAPIAuthentication no
+    Port 2222

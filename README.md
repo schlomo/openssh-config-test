@@ -1,4 +1,5 @@
 ## Automated test suite for OpenSSH configuration
+![Logo](https://docs.google.com/drawings/d/1BcVvEycrTL7N2WwUqqjA1Uqe4KzM36UvT6fy8tIUg70/pub?w=476)
 
 When developing or fine-tuning OpenSSH configurations the testing can be quite tiresome. These scripts create a test environment where one can test various setups without deploying a server or breaking the existing SSH configuration.
 
